@@ -1,0 +1,16 @@
+prototype(Neos.Neos:Page) {
+    head {
+        stylesheets {
+            textPartLanguage = Neos.Fusion:Tag {
+                tagName = 'link'
+                attributes {
+                    rel = 'stylesheet'
+                    href = Neos.Fusion:ResourceUri {
+                        path = 'resource://Prgfx.Neos.TextPartLanguage/Public/Css/TextPartLanguage/Styles.css'
+                    }
+                }
+                @if.inBackend = ${documentNode.context.inBackend}
+            }
+        }
+    }
+}

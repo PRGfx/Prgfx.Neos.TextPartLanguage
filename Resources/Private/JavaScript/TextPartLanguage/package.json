@@ -1,0 +1,21 @@
+{
+  "description": "",
+  "license": "GNU GPLv3",
+  "private": true,
+  "scripts": {
+    "build": "neos-react-scripts build",
+    "watch": "neos-react-scripts watch"
+  },
+  "devDependencies": {
+    "@neos-project/neos-ui-extensibility": "*"
+  },
+  "neos": {
+    "buildTargetDirectory": "../../../Public/JavaScript/TextPartLanguage"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-language": "27.1.0",
+    "@ckeditor/ckeditor5-utils": "^27.1.0",
+    "null-loader": "^4.0.1",
+    "raw-loader": "^4.0.2"
+  }
+}
