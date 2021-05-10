@@ -10,10 +10,14 @@ manifest('Prgfx.Neos.TextPartLanguage', {}, (globalRegistry, { frontendConfigura
     const config = ckEditorRegistry.get('config');
 
     const defaultLanguages = frontendConfiguration['Prgfx.Neos.TextPartLanguage:languages'] || {};
+    const languageDirections = frontendConfiguration['Prgfx.Neos.TextPartLanguage:languageDirections'] || {};
 
     config.set('textPartLanguage', ckeEditorConfiguration => {
         ckeEditorConfiguration.plugins = ckeEditorConfiguration.plugins || [];
         ckeEditorConfiguration.plugins.push(TextPartLanguage);
+        ckeEditorConfiguration.textPartLanguage = {
+            languageDirections,
+        };
         return ckeEditorConfiguration;
     });
 

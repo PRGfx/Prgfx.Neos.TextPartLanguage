@@ -1,5 +1,10 @@
 import { Plugin } from 'ckeditor5-exports';
 import TextPartLanguageCommand, { commandName } from './command';
+import {
+    getLanguageDirection,
+    parseLanguageAttribute,
+    stringifyLanguageAttribute,
+} from './util';
 
 export const attributeName = 'language';
 
@@ -10,9 +15,8 @@ export default class TextPartLanguageEditing extends Plugin {
 
     constructor(editor) {
         super(editor);
-        editor.config.define('language', {
-            textPartLanguage: []
-        });
+        this.languageDirectionLookup = getLanguageDirection(editor.config.get('textPartLanguage').languageDirections);
+        this.stringifyLanguageAttribute = stringifyLanguageAttribute(this.languageDirectionLookup);
     }
 
     init() {
@@ -32,7 +36,11 @@ export default class TextPartLanguageEditing extends Plugin {
         conversion.for('upcast').elementToAttribute({
             model: {
                 key: attributeName,
-                value: viewElement => viewElement.getAttribute('lang')
+                value: viewElement => {
+                    const languageCode = viewElement.getAttribute('lang');
+                    const textDirection = viewElement.getAttribute('dir');
+                    return this.stringifyLanguageAttribute(languageCode, textDirection);
+                }
             },
             view: {
                 name: 'span',
@@ -47,8 +55,11 @@ export default class TextPartLanguageEditing extends Plugin {
                     return;
                 }
 
+                const { languageCode, textDirection } = parseLanguageAttribute(attributeValue);
+
                 return writer.createAttributeElement('span', {
-                    lang: attributeValue,
+                    lang: languageCode,
+                    dir: textDirection || this.languageDirectionLookup(languageCode),
                 });
             }
         });

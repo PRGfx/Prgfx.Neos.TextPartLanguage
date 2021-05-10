@@ -1118,6 +1118,8 @@ var CkEditorApi = _interopRequireWildcard(_neosUiCkeditor5Bindings);
 
 var _command = __webpack_require__(/*! ./command */ "./src/command.js");
 
+var _util = __webpack_require__(/*! ./util */ "./src/util.js");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1169,7 +1171,12 @@ var LanguageSelect = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistr
             });
             var placeholderKey = this.props.inlineEditorOptions.textLanguages.placeholder || 'Prgfx.Neos.TextPartLanguage:Editor:placeholder';
             var placeholder = this.props.i18nRegistry.translate(placeholderKey);
-            var currentValue = this.props.formattingUnderCursor.textPartLanguage || null;
+            var currentAttributeValue = this.props.formattingUnderCursor.textPartLanguage || null;
+            var currentValue = null;
+            if (currentAttributeValue) {
+                currentValue = (0, _util.parseLanguageAttribute)(currentAttributeValue).languageCode;
+            }
+
             return _react2.default.createElement(_reactUiComponents.SelectBox, {
                 options: options,
                 value: currentValue,
@@ -1396,6 +1403,8 @@ var _command = __webpack_require__(/*! ./command */ "./src/command.js");
 
 var _command2 = _interopRequireDefault(_command);
 
+var _util = __webpack_require__(/*! ./util */ "./src/util.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1421,9 +1430,8 @@ var TextPartLanguageEditing = function (_Plugin) {
 
         var _this = _possibleConstructorReturn(this, (TextPartLanguageEditing.__proto__ || Object.getPrototypeOf(TextPartLanguageEditing)).call(this, editor));
 
-        editor.config.define('language', {
-            textPartLanguage: []
-        });
+        _this.languageDirectionLookup = (0, _util.getLanguageDirection)(editor.config.get('textPartLanguage').languageDirections);
+        _this.stringifyLanguageAttribute = (0, _util.stringifyLanguageAttribute)(_this.languageDirectionLookup);
         return _this;
     }
 
@@ -1442,13 +1450,17 @@ var TextPartLanguageEditing = function (_Plugin) {
     }, {
         key: '_defineConverters',
         value: function _defineConverters() {
+            var _this2 = this;
+
             var conversion = this.editor.conversion;
 
             conversion.for('upcast').elementToAttribute({
                 model: {
                     key: attributeName,
                     value: function value(viewElement) {
-                        return viewElement.getAttribute('lang');
+                        var languageCode = viewElement.getAttribute('lang');
+                        var textDirection = viewElement.getAttribute('dir');
+                        return _this2.stringifyLanguageAttribute(languageCode, textDirection);
                     }
                 },
                 view: {
@@ -1464,8 +1476,13 @@ var TextPartLanguageEditing = function (_Plugin) {
                         return;
                     }
 
+                    var _parseLanguageAttribu = (0, _util.parseLanguageAttribute)(attributeValue),
+                        languageCode = _parseLanguageAttribu.languageCode,
+                        textDirection = _parseLanguageAttribu.textDirection;
+
                     return writer.createAttributeElement('span', {
-                        lang: attributeValue
+                        lang: languageCode,
+                        dir: textDirection || _this2.languageDirectionLookup(languageCode)
                     });
                 }
             });
@@ -1528,10 +1545,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     var config = ckEditorRegistry.get('config');
 
     var defaultLanguages = frontendConfiguration['Prgfx.Neos.TextPartLanguage:languages'] || {};
+    var languageDirections = frontendConfiguration['Prgfx.Neos.TextPartLanguage:languageDirections'] || {};
 
     config.set('textPartLanguage', function (ckeEditorConfiguration) {
         ckeEditorConfiguration.plugins = ckeEditorConfiguration.plugins || [];
         ckeEditorConfiguration.plugins.push(_editing2.default);
+        ckeEditorConfiguration.textPartLanguage = {
+            languageDirections: languageDirections
+        };
         return ckeEditorConfiguration;
     });
 
@@ -1542,6 +1563,76 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         defaultLanguages: defaultLanguages
     });
 });
+
+/***/ }),
+
+/***/ "./src/util.js":
+/*!*********************!*\
+  !*** ./src/util.js ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+/**
+ * @param {Record<string, 'rtl'|null>} lookupTable
+ * @returns {function(string): string}
+ */
+var getLanguageDirection = exports.getLanguageDirection = function getLanguageDirection(lookupTable) {
+  return (
+    /**
+     * @param {string} languageCode
+     * @returns {'rtl'|'ltr'}
+     */
+    function (languageCode) {
+      return lookupTable[languageCode] || 'ltr';
+    }
+  );
+};
+
+/**
+ * Stringify language-code and text-direction to a ckeditor model attribute value
+ * @param {ReturnType<getLanguageDirection>} languageDirectionLookup
+ * @returns {(function(string, string?): string)}
+ */
+var stringifyLanguageAttribute = exports.stringifyLanguageAttribute = function stringifyLanguageAttribute(languageDirectionLookup) {
+  return (
+    /**
+     * @param {string} languageCode
+     * @param {string} textDirection
+     * @returns {string}
+     */
+    function (languageCode, textDirection) {
+      if (!textDirection) {
+        var isoCode = languageCode.split(/[-_]/)[0];
+        textDirection = languageDirectionLookup(isoCode);
+      }
+      return languageCode + ':' + textDirection;
+    }
+  );
+};
+
+/**
+ * Retrieves language properties from the attribute as stringified by {@link stringifyLanguageAttribute}.
+ * @param {string} attributeString
+ * @returns {{textDirection: string, languageCode: string}}
+ */
+var parseLanguageAttribute = exports.parseLanguageAttribute = function parseLanguageAttribute(attributeString) {
+  var _attributeString$spli = attributeString.split(':'),
+      _attributeString$spli2 = _slicedToArray(_attributeString$spli, 2),
+      languageCode = _attributeString$spli2[0],
+      textDirection = _attributeString$spli2[1];
+
+  return { languageCode: languageCode, textDirection: textDirection };
+};
 
 /***/ })
 

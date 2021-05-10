@@ -7,6 +7,24 @@ Neos:
             resource: resource://Prgfx.Neos.TextPartLanguage/Public/JavaScript/TextPartLanguage/Plugin.js
       frontendConfiguration:
         'Prgfx.Neos.TextPartLanguage:languages': ${Configuration.setting('Neos.Neos.userInterface.availableLanguages')}
+        'Prgfx.Neos.TextPartLanguage:languageDirections':
+          # ckeditor5 RTL_LANGUAGE_CODES
+          # Arabic
+          ar: rtl
+          ara: rtl
+          # Persian
+          fa: rtl
+          per: rtl
+          fas: rtl
+          # Hebrew
+          he: rtl
+          heb: rtl
+          # Kurdish
+          ku: rtl
+          kur: rtl
+          # Uighur, Uyghur
+          ug: rtl
+          uig: rtl
     userInterface:
       translation:
         autoInclude:

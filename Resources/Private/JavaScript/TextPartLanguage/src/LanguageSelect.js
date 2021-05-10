@@ -7,6 +7,7 @@ import { $transform } from 'plow-js';
 import { selectors } from '@neos-project/neos-ui-redux-store';
 import * as CkEditorApi from '@neos-project/neos-ui-ckeditor5-bindings';
 import { commandName } from './command';
+import { parseLanguageAttribute } from './util';
 
 export const sanitizeOptions = (options) =>
     Object.entries(options || {}).filter(tpl => !!tpl[1]);
@@ -43,7 +44,12 @@ export default class LanguageSelect extends PureComponent {
         const placeholderKey = this.props.inlineEditorOptions.textLanguages.placeholder
             || 'Prgfx.Neos.TextPartLanguage:Editor:placeholder';
         const placeholder = this.props.i18nRegistry.translate(placeholderKey);
-        const currentValue = this.props.formattingUnderCursor.textPartLanguage || null;
+        const currentAttributeValue = this.props.formattingUnderCursor.textPartLanguage || null;
+        let currentValue = null;
+        if (currentAttributeValue) {
+            currentValue = parseLanguageAttribute(currentAttributeValue).languageCode;
+        }
+
         return (
             <SelectBox
                 options={options}
