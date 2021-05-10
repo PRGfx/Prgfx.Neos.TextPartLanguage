@@ -1,3 +1,5 @@
+[![Version](https://poser.pugx.org/prgfx/neos-textpartlanguage/version)](//packagist.org/packages/prgfx/neos-textpartlanguage)
+
 # Prgfx.Neos.TextPartLanguage
 
 This package allows editors to tag selected text with a language, helping assistive technology with pronunciation, implementing the [WCAG 3.1.2 Language of Parts](https://www.w3.org/TR/UNDERSTANDING-WCAG20/meaning-other-lang-id.html) specification.
