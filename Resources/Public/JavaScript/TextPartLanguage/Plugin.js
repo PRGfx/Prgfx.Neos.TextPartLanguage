@@ -96,9 +96,11 @@
 "use strict";
 
 
+var __importDefault = undefined && undefined.__importDefault || function (mod) {
+    return mod && mod.__esModule ? mod : { "default": mod };
+};
 exports.__esModule = true;
-var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-var manifest_1 = tslib_1.__importDefault(__webpack_require__(/*! ./manifest */ "./node_modules/@neos-project/neos-ui-extensibility/dist/manifest.js"));
+var manifest_1 = __importDefault(__webpack_require__(/*! ./manifest */ "./node_modules/@neos-project/neos-ui-extensibility/dist/manifest.js"));
 var createReadOnlyValue = function createReadOnlyValue(value) {
     return {
         value: value,
@@ -112,7 +114,7 @@ function createConsumerApi(manifests, exposureMap) {
     Object.keys(exposureMap).forEach(function (key) {
         Object.defineProperty(api, key, createReadOnlyValue(exposureMap[key]));
     });
-    Object.defineProperty(api, '@manifest', createReadOnlyValue(manifest_1["default"](manifests)));
+    Object.defineProperty(api, '@manifest', createReadOnlyValue((0, manifest_1["default"])(manifests)));
     Object.defineProperty(window, '@Neos:HostPluginAPI', createReadOnlyValue(api));
 }
 exports["default"] = createConsumerApi;
@@ -130,16 +132,19 @@ exports["default"] = createConsumerApi;
 "use strict";
 
 
+var __importDefault = undefined && undefined.__importDefault || function (mod) {
+    return mod && mod.__esModule ? mod : { "default": mod };
+};
 exports.__esModule = true;
-var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-var createConsumerApi_1 = tslib_1.__importDefault(__webpack_require__(/*! ./createConsumerApi */ "./node_modules/@neos-project/neos-ui-extensibility/dist/createConsumerApi.js"));
+exports.SynchronousMetaRegistry = exports.SynchronousRegistry = exports.readFromConsumerApi = exports.createConsumerApi = void 0;
+var createConsumerApi_1 = __importDefault(__webpack_require__(/*! ./createConsumerApi */ "./node_modules/@neos-project/neos-ui-extensibility/dist/createConsumerApi.js"));
 exports.createConsumerApi = createConsumerApi_1["default"];
-var readFromConsumerApi_1 = tslib_1.__importDefault(__webpack_require__(/*! ./readFromConsumerApi */ "./node_modules/@neos-project/neos-ui-extensibility/dist/readFromConsumerApi.js"));
+var readFromConsumerApi_1 = __importDefault(__webpack_require__(/*! ./readFromConsumerApi */ "./node_modules/@neos-project/neos-ui-extensibility/dist/readFromConsumerApi.js"));
 exports.readFromConsumerApi = readFromConsumerApi_1["default"];
 var index_1 = __webpack_require__(/*! ./registry/index */ "./node_modules/@neos-project/neos-ui-extensibility/dist/registry/index.js");
 exports.SynchronousRegistry = index_1.SynchronousRegistry;
 exports.SynchronousMetaRegistry = index_1.SynchronousMetaRegistry;
-exports["default"] = readFromConsumerApi_1["default"]('manifest');
+exports["default"] = (0, readFromConsumerApi_1["default"])('manifest');
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -178,8 +183,38 @@ exports["default"] = function (manifests) {
 "use strict";
 
 
+var __read = undefined && undefined.__read || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o),
+        r,
+        ar = [],
+        e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) {
+            ar.push(r.value);
+        }
+    } catch (error) {
+        e = { error: error };
+    } finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        } finally {
+            if (e) throw e.error;
+        }
+    }
+    return ar;
+};
+var __spreadArray = undefined && undefined.__spreadArray || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 exports.__esModule = true;
-var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 function readFromConsumerApi(key) {
     return function () {
         var _a;
@@ -187,10 +222,10 @@ function readFromConsumerApi(key) {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        if (window['@Neos:HostPluginAPI'] && window['@Neos:HostPluginAPI']["@" + key]) {
-            return (_a = window['@Neos:HostPluginAPI'])["@" + key].apply(_a, tslib_1.__spread(args));
+        if (window['@Neos:HostPluginAPI'] && window['@Neos:HostPluginAPI']["@".concat(key)]) {
+            return (_a = window['@Neos:HostPluginAPI'])["@".concat(key)].apply(_a, __spreadArray([], __read(args), false));
         }
-        throw new Error("You are trying to read from a consumer api that hasn't been initialized yet!");
+        throw new Error('You are trying to read from a consumer api that hasn\'t been initialized yet!');
     };
 }
 exports["default"] = readFromConsumerApi;
@@ -231,11 +266,33 @@ exports["default"] = AbstractRegistry;
 "use strict";
 
 
+var __extends = undefined && undefined.__extends || function () {
+    var _extendStatics = function extendStatics(d, b) {
+        _extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+            d.__proto__ = b;
+        } || function (d, b) {
+            for (var p in b) {
+                if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
+            }
+        };
+        return _extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        _extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+var __importDefault = undefined && undefined.__importDefault || function (mod) {
+    return mod && mod.__esModule ? mod : { "default": mod };
+};
 exports.__esModule = true;
-var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-var SynchronousRegistry_1 = tslib_1.__importDefault(__webpack_require__(/*! ./SynchronousRegistry */ "./node_modules/@neos-project/neos-ui-extensibility/dist/registry/SynchronousRegistry.js"));
+var SynchronousRegistry_1 = __importDefault(__webpack_require__(/*! ./SynchronousRegistry */ "./node_modules/@neos-project/neos-ui-extensibility/dist/registry/SynchronousRegistry.js"));
 var SynchronousMetaRegistry = function (_super) {
-    tslib_1.__extends(SynchronousMetaRegistry, _super);
+    __extends(SynchronousMetaRegistry, _super);
     function SynchronousMetaRegistry() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -262,12 +319,34 @@ exports["default"] = SynchronousMetaRegistry;
 "use strict";
 
 
+var __extends = undefined && undefined.__extends || function () {
+    var _extendStatics = function extendStatics(d, b) {
+        _extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+            d.__proto__ = b;
+        } || function (d, b) {
+            for (var p in b) {
+                if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
+            }
+        };
+        return _extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        _extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+var __importDefault = undefined && undefined.__importDefault || function (mod) {
+    return mod && mod.__esModule ? mod : { "default": mod };
+};
 exports.__esModule = true;
-var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-var AbstractRegistry_1 = tslib_1.__importDefault(__webpack_require__(/*! ./AbstractRegistry */ "./node_modules/@neos-project/neos-ui-extensibility/dist/registry/AbstractRegistry.js"));
-var positional_array_sorter_1 = tslib_1.__importDefault(__webpack_require__(/*! @neos-project/positional-array-sorter */ "./node_modules/@neos-project/positional-array-sorter/dist/positionalArraySorter.js"));
+var AbstractRegistry_1 = __importDefault(__webpack_require__(/*! ./AbstractRegistry */ "./node_modules/@neos-project/neos-ui-extensibility/dist/registry/AbstractRegistry.js"));
+var positional_array_sorter_1 = __importDefault(__webpack_require__(/*! @neos-project/positional-array-sorter */ "./node_modules/@neos-project/positional-array-sorter/dist/positionalArraySorter.js"));
 var SynchronousRegistry = function (_super) {
-    tslib_1.__extends(SynchronousRegistry, _super);
+    __extends(SynchronousRegistry, _super);
     function SynchronousRegistry(description) {
         var _this = _super.call(this, description) || this;
         _this._registry = [];
@@ -311,7 +390,7 @@ var SynchronousRegistry = function (_super) {
         var unsortedChildren = this._registry.filter(function (item) {
             return item.key.indexOf(searchKey + '/') === 0;
         });
-        return positional_array_sorter_1["default"](unsortedChildren);
+        return (0, positional_array_sorter_1["default"])(unsortedChildren);
     };
     SynchronousRegistry.prototype.getChildrenAsObject = function (searchKey) {
         var result = {};
@@ -335,7 +414,7 @@ var SynchronousRegistry = function (_super) {
         }));
     };
     SynchronousRegistry.prototype._getAllWrapped = function () {
-        return positional_array_sorter_1["default"](this._registry);
+        return (0, positional_array_sorter_1["default"])(this._registry);
     };
     SynchronousRegistry.prototype.getAllAsObject = function () {
         var result = {};
@@ -366,11 +445,14 @@ exports["default"] = SynchronousRegistry;
 "use strict";
 
 
+var __importDefault = undefined && undefined.__importDefault || function (mod) {
+    return mod && mod.__esModule ? mod : { "default": mod };
+};
 exports.__esModule = true;
-var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-var SynchronousRegistry_1 = tslib_1.__importDefault(__webpack_require__(/*! ./SynchronousRegistry */ "./node_modules/@neos-project/neos-ui-extensibility/dist/registry/SynchronousRegistry.js"));
+exports.SynchronousMetaRegistry = exports.SynchronousRegistry = void 0;
+var SynchronousRegistry_1 = __importDefault(__webpack_require__(/*! ./SynchronousRegistry */ "./node_modules/@neos-project/neos-ui-extensibility/dist/registry/SynchronousRegistry.js"));
 exports.SynchronousRegistry = SynchronousRegistry_1["default"];
-var SynchronousMetaRegistry_1 = tslib_1.__importDefault(__webpack_require__(/*! ./SynchronousMetaRegistry */ "./node_modules/@neos-project/neos-ui-extensibility/dist/registry/SynchronousMetaRegistry.js"));
+var SynchronousMetaRegistry_1 = __importDefault(__webpack_require__(/*! ./SynchronousMetaRegistry */ "./node_modules/@neos-project/neos-ui-extensibility/dist/registry/SynchronousMetaRegistry.js"));
 exports.SynchronousMetaRegistry = SynchronousMetaRegistry_1["default"];
 //# sourceMappingURL=index.js.map
 
@@ -1090,8 +1172,6 @@ exports.default = exports.sanitizeOptions = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _dec, _dec2, _class, _class2, _temp;
 
 var _react = __webpack_require__(/*! react */ "./node_modules/@neos-project/neos-ui-extensibility/src/shims/vendor/react/index.js");
@@ -1124,12 +1204,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var sanitizeOptions = exports.sanitizeOptions = function sanitizeOptions(options) {
     return Object.entries(options || {}).filter(function (tpl) {
         return !!tpl[1];
@@ -1142,60 +1216,49 @@ var LanguageSelect = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistr
     };
 }), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
     formattingUnderCursor: _neosUiReduxStore.selectors.UI.ContentCanvas.formattingUnderCursor
-})), _dec(_class = _dec2(_class = (_temp = _class2 = function (_PureComponent) {
-    _inherits(LanguageSelect, _PureComponent);
+})), _dec(_class = _dec2(_class = (_temp = _class2 = class LanguageSelect extends _react.PureComponent {
 
-    function LanguageSelect(props) {
-        _classCallCheck(this, LanguageSelect);
-
-        var _this = _possibleConstructorReturn(this, (LanguageSelect.__proto__ || Object.getPrototypeOf(LanguageSelect)).call(this, props));
-
-        _this.handleOnSelect = _this.handleOnSelect.bind(_this);
-        return _this;
+    constructor(props) {
+        super(props);
+        this.handleOnSelect = this.handleOnSelect.bind(this);
     }
 
-    _createClass(LanguageSelect, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
+    render() {
+        var _this = this;
 
-            var options = sanitizeOptions(this.props.inlineEditorOptions.textLanguages.languages || this.props.defaultLanguages || {}).map(function (_ref) {
-                var _ref2 = _slicedToArray(_ref, 2),
-                    value = _ref2[0],
-                    label = _ref2[1];
+        var options = sanitizeOptions(this.props.inlineEditorOptions.textLanguages.languages || this.props.defaultLanguages || {}).map(function (_ref) {
+            var _ref2 = _slicedToArray(_ref, 2),
+                value = _ref2[0],
+                label = _ref2[1];
 
-                return {
-                    label: _this2.props.i18nRegistry.translate(label),
-                    value: value
-                };
-            });
-            var placeholderKey = this.props.inlineEditorOptions.textLanguages.placeholder || 'Prgfx.Neos.TextPartLanguage:Editor:placeholder';
-            var placeholder = this.props.i18nRegistry.translate(placeholderKey);
-            var currentAttributeValue = this.props.formattingUnderCursor.textPartLanguage || null;
-            var currentValue = null;
-            if (currentAttributeValue) {
-                currentValue = (0, _util.parseLanguageAttribute)(currentAttributeValue).languageCode;
-            }
-
-            return _react2.default.createElement(_reactUiComponents.SelectBox, {
-                options: options,
-                value: currentValue,
-                placeholder: placeholder,
-                allowEmpty: true,
-                onValueChange: this.handleOnSelect
-            });
+            return {
+                label: _this.props.i18nRegistry.translate(label),
+                value: value
+            };
+        });
+        var placeholderKey = this.props.inlineEditorOptions.textLanguages.placeholder || 'Prgfx.Neos.TextPartLanguage:Editor:placeholder';
+        var placeholder = this.props.i18nRegistry.translate(placeholderKey);
+        var currentAttributeValue = this.props.formattingUnderCursor.textPartLanguage || null;
+        var currentValue = null;
+        if (currentAttributeValue) {
+            currentValue = (0, _util.parseLanguageAttribute)(currentAttributeValue).languageCode;
         }
-    }, {
-        key: 'handleOnSelect',
-        value: function handleOnSelect(languageCode) {
-            CkEditorApi.executeCommand(_command.commandName, {
-                languageCode: languageCode
-            });
-        }
-    }]);
 
-    return LanguageSelect;
-}(_react.PureComponent), _class2.propTypes = {
+        return _react2.default.createElement(_reactUiComponents.SelectBox, {
+            options: options,
+            value: currentValue,
+            placeholder: placeholder,
+            allowEmpty: true,
+            onValueChange: this.handleOnSelect
+        });
+    }
+
+    handleOnSelect(languageCode) {
+        CkEditorApi.executeCommand(_command.commandName, {
+            languageCode: languageCode
+        });
+    }
+}, _class2.propTypes = {
     formattingUnderCursor: _propTypes2.default.object.isRequired,
     inlineEditorOptions: _propTypes2.default.object.isRequired,
     i18nRegistry: _propTypes2.default.object.isRequired,
@@ -1220,162 +1283,139 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = exports.commandName = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _ckeditor5Exports = __webpack_require__(/*! ckeditor5-exports */ "./node_modules/@neos-project/neos-ui-extensibility/src/shims/vendor/ckeditor5-exports/index.js");
 
 var _editing = __webpack_require__(/*! ./editing */ "./src/editing.js");
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var commandName = exports.commandName = 'textPartLanguage';
 
-var TextPartLanguageCommand = function (_Command) {
-    _inherits(TextPartLanguageCommand, _Command);
+var TextPartLanguageCommand = class TextPartLanguageCommand extends _ckeditor5Exports.Command {
+    refresh() {
+        var model = this.editor.model;
+        var doc = model.document;
 
-    function TextPartLanguageCommand() {
-        _classCallCheck(this, TextPartLanguageCommand);
-
-        return _possibleConstructorReturn(this, (TextPartLanguageCommand.__proto__ || Object.getPrototypeOf(TextPartLanguageCommand)).apply(this, arguments));
+        this.value = this._getValueFromFirstAllowedNode();
+        this.isEnabled = model.schema.checkAttributeInSelection(doc.selection, _editing.attributeName);
     }
 
-    _createClass(TextPartLanguageCommand, [{
-        key: 'refresh',
-        value: function refresh() {
-            var model = this.editor.model;
-            var doc = model.document;
+    execute() {
+        var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            languageCode = _ref.languageCode;
 
-            this.value = this._getValueFromFirstAllowedNode();
-            this.isEnabled = model.schema.checkAttributeInSelection(doc.selection, _editing.attributeName);
-        }
-    }, {
-        key: 'execute',
-        value: function execute() {
-            var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-                languageCode = _ref.languageCode;
+        var model = this.editor.model;
+        var doc = model.document;
+        var selection = doc.selection;
 
-            var model = this.editor.model;
-            var doc = model.document;
-            var selection = doc.selection;
+        var value = languageCode || false;
 
-            var value = languageCode || false;
-
-            model.change(function (writer) {
-                if (selection.isCollapsed) {
-                    // from the original plugin:
-                    // this seems to apply to an "empty" selection and would just
-                    // insert span at the current cursor, which is not what we want,
-                    // because it is difficult to find and un-set
-                    // if (value) {
-                    //     writer.setSelectionAttribute(attributeName, value);
-                    // } else {
-                    //     writer.removeSelectionAttribute(attributeName);
-                    // }
-                } else {
-                    var ranges = model.schema.getValidRanges(selection.getRanges(), _editing.attributeName);
-
-                    var _iteratorNormalCompletion = true;
-                    var _didIteratorError = false;
-                    var _iteratorError = undefined;
-
-                    try {
-                        for (var _iterator = ranges[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                            var range = _step.value;
-
-                            if (value) {
-                                writer.setAttribute(_editing.attributeName, value, range);
-                            } else {
-                                writer.removeAttribute(_editing.attributeName, range);
-                            }
-                        }
-                    } catch (err) {
-                        _didIteratorError = true;
-                        _iteratorError = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion && _iterator.return) {
-                                _iterator.return();
-                            }
-                        } finally {
-                            if (_didIteratorError) {
-                                throw _iteratorError;
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    }, {
-        key: '_getValueFromFirstAllowedNode',
-        value: function _getValueFromFirstAllowedNode() {
-            var model = this.editor.model;
-            var schema = model.schema;
-            var selection = model.document.selection;
-
+        model.change(function (writer) {
             if (selection.isCollapsed) {
-                return selection.getAttribute(_editing.attributeName) || false;
-            }
+                // from the original plugin:
+                // this seems to apply to an "empty" selection and would just
+                // insert span at the current cursor, which is not what we want,
+                // because it is difficult to find and un-set
+                // if (value) {
+                //     writer.setSelectionAttribute(attributeName, value);
+                // } else {
+                //     writer.removeSelectionAttribute(attributeName);
+                // }
+            } else {
+                var ranges = model.schema.getValidRanges(selection.getRanges(), _editing.attributeName);
 
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
 
-            try {
-                for (var _iterator2 = selection.getRanges()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var range = _step2.value;
-                    var _iteratorNormalCompletion3 = true;
-                    var _didIteratorError3 = false;
-                    var _iteratorError3 = undefined;
-
-                    try {
-                        for (var _iterator3 = range.getItems()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                            var item = _step3.value;
-
-                            if (schema.checkAttribute(item, _editing.attributeName)) {
-                                return item.getAttribute(_editing.attributeName) || false;
-                            }
-                        }
-                    } catch (err) {
-                        _didIteratorError3 = true;
-                        _iteratorError3 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                                _iterator3.return();
-                            }
-                        } finally {
-                            if (_didIteratorError3) {
-                                throw _iteratorError3;
-                            }
-                        }
-                    }
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
                 try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
+                    for (var _iterator = ranges[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var range = _step.value;
+
+                        if (value) {
+                            writer.setAttribute(_editing.attributeName, value, range);
+                        } else {
+                            writer.removeAttribute(_editing.attributeName, range);
+                        }
                     }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
                 } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
                     }
                 }
             }
+        });
+    }
 
-            return false;
+    _getValueFromFirstAllowedNode() {
+        var model = this.editor.model;
+        var schema = model.schema;
+        var selection = model.document.selection;
+
+        if (selection.isCollapsed) {
+            return selection.getAttribute(_editing.attributeName) || false;
         }
-    }]);
 
-    return TextPartLanguageCommand;
-}(_ckeditor5Exports.Command);
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
 
+        try {
+            for (var _iterator2 = selection.getRanges()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var range = _step2.value;
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
+
+                try {
+                    for (var _iterator3 = range.getItems()[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                        var item = _step3.value;
+
+                        if (schema.checkAttribute(item, _editing.attributeName)) {
+                            return item.getAttribute(_editing.attributeName) || false;
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError3 = true;
+                    _iteratorError3 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                            _iterator3.return();
+                        }
+                    } finally {
+                        if (_didIteratorError3) {
+                            throw _iteratorError3;
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                    _iterator2.return();
+                }
+            } finally {
+                if (_didIteratorError2) {
+                    throw _iteratorError2;
+                }
+            }
+        }
+
+        return false;
+    }
+
+};
 exports.default = TextPartLanguageCommand;
 
 /***/ }),
@@ -1395,8 +1435,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = exports.attributeName = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _ckeditor5Exports = __webpack_require__(/*! ckeditor5-exports */ "./node_modules/@neos-project/neos-ui-extensibility/src/shims/vendor/ckeditor5-exports/index.js");
 
 var _command = __webpack_require__(/*! ./command */ "./src/command.js");
@@ -1407,91 +1445,69 @@ var _util = __webpack_require__(/*! ./util */ "./src/util.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var attributeName = exports.attributeName = 'language';
 
-var TextPartLanguageEditing = function (_Plugin) {
-    _inherits(TextPartLanguageEditing, _Plugin);
-
-    _createClass(TextPartLanguageEditing, null, [{
-        key: 'pluginName',
-        get: function get() {
-            return 'TextPartLanguageEditing';
-        }
-    }]);
-
-    function TextPartLanguageEditing(editor) {
-        _classCallCheck(this, TextPartLanguageEditing);
-
-        var _this = _possibleConstructorReturn(this, (TextPartLanguageEditing.__proto__ || Object.getPrototypeOf(TextPartLanguageEditing)).call(this, editor));
-
-        _this.languageDirectionLookup = (0, _util.getLanguageDirection)(editor.config.get('textPartLanguage').languageDirections);
-        _this.stringifyLanguageAttribute = (0, _util.stringifyLanguageAttribute)(_this.languageDirectionLookup);
-        return _this;
+var TextPartLanguageEditing = class TextPartLanguageEditing extends _ckeditor5Exports.Plugin {
+    static get pluginName() {
+        return 'TextPartLanguageEditing';
     }
 
-    _createClass(TextPartLanguageEditing, [{
-        key: 'init',
-        value: function init() {
-            var editor = this.editor;
+    constructor(editor) {
+        super(editor);
+        this.languageDirectionLookup = (0, _util.getLanguageDirection)(editor.config.get('textPartLanguage').languageDirections);
+        this.stringifyLanguageAttribute = (0, _util.stringifyLanguageAttribute)(this.languageDirectionLookup);
+    }
 
-            editor.model.schema.extend('$text', { allowAttributes: attributeName });
-            editor.model.schema.setAttributeProperties(attributeName, {
-                copyOnEnter: true
-            });
-            this._defineConverters();
-            editor.commands.add(_command.commandName, new _command2.default(editor));
-        }
-    }, {
-        key: '_defineConverters',
-        value: function _defineConverters() {
-            var _this2 = this;
+    init() {
+        var editor = this.editor;
 
-            var conversion = this.editor.conversion;
+        editor.model.schema.extend('$text', { allowAttributes: attributeName });
+        editor.model.schema.setAttributeProperties(attributeName, {
+            copyOnEnter: true
+        });
+        this._defineConverters();
+        editor.commands.add(_command.commandName, new _command2.default(editor));
+    }
 
-            conversion.for('upcast').elementToAttribute({
-                model: {
-                    key: attributeName,
-                    value: function value(viewElement) {
-                        var languageCode = viewElement.getAttribute('lang');
-                        var textDirection = viewElement.getAttribute('dir');
-                        return _this2.stringifyLanguageAttribute(languageCode, textDirection);
-                    }
-                },
-                view: {
-                    name: 'span',
-                    attributes: { lang: /[\s\S]+/ }
+    _defineConverters() {
+        var _this = this;
+
+        var conversion = this.editor.conversion;
+
+        conversion.for('upcast').elementToAttribute({
+            model: {
+                key: attributeName,
+                value: function value(viewElement) {
+                    var languageCode = viewElement.getAttribute('lang');
+                    var textDirection = viewElement.getAttribute('dir');
+                    return _this.stringifyLanguageAttribute(languageCode, textDirection);
                 }
-            });
+            },
+            view: {
+                name: 'span',
+                attributes: { lang: /[\s\S]+/ }
+            }
+        });
 
-            conversion.for('downcast').attributeToElement({
-                model: attributeName,
-                view: function view(attributeValue, writer) {
-                    if (!attributeValue) {
-                        return;
-                    }
-
-                    var _parseLanguageAttribu = (0, _util.parseLanguageAttribute)(attributeValue),
-                        languageCode = _parseLanguageAttribu.languageCode,
-                        textDirection = _parseLanguageAttribu.textDirection;
-
-                    return writer.createAttributeElement('span', {
-                        lang: languageCode,
-                        dir: textDirection || _this2.languageDirectionLookup(languageCode)
-                    });
+        conversion.for('downcast').attributeToElement({
+            model: attributeName,
+            view: function view(attributeValue, writer) {
+                if (!attributeValue) {
+                    return;
                 }
-            });
-        }
-    }]);
 
-    return TextPartLanguageEditing;
-}(_ckeditor5Exports.Plugin);
+                var _parseLanguageAttribu = (0, _util.parseLanguageAttribute)(attributeValue),
+                    languageCode = _parseLanguageAttribu.languageCode,
+                    textDirection = _parseLanguageAttribu.textDirection;
 
+                return writer.createAttributeElement('span', {
+                    lang: languageCode,
+                    dir: textDirection || _this.languageDirectionLookup(languageCode)
+                });
+            }
+        });
+    }
+};
 exports.default = TextPartLanguageEditing;
 
 /***/ }),
