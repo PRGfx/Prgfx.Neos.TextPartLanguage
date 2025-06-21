@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { neos } from '@neos-project/neos-ui-decorators';
 import { SelectBox } from '@neos-project/react-ui-components';
 import { connect } from 'react-redux';
-import { $transform } from 'plow-js';
 import { selectors } from '@neos-project/neos-ui-redux-store';
 import * as CkEditorApi from '@neos-project/neos-ui-ckeditor5-bindings';
 import { commandName } from './command';
@@ -15,8 +14,8 @@ export const sanitizeOptions = (options) =>
 @neos(globalRegistry => ({
     i18nRegistry: globalRegistry.get('i18n'),
 }))
-@connect($transform({
-    formattingUnderCursor: selectors.UI.ContentCanvas.formattingUnderCursor,
+@connect(state => ({
+    formattingUnderCursor: selectors.UI.ContentCanvas.formattingUnderCursor(state),
 }))
 export default class LanguageSelect extends PureComponent {
     static propTypes = {
