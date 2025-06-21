@@ -50,13 +50,15 @@ export default class TextPartLanguageEditing extends Plugin {
 
         conversion.for('downcast').attributeToElement({
             model: attributeName,
-            view: (attributeValue, writer) => {
+            // between Neos 8 and 9 the editor API changed and the writer is passed in an options object
+            view: (attributeValue, maybeWriter) => {
                 if (!attributeValue) {
                     return;
                 }
 
                 const { languageCode, textDirection } = parseLanguageAttribute(attributeValue);
 
+                const writer = 'writer' in maybeWriter ? maybeWriter.writer : maybeWriter;
                 return writer.createAttributeElement('span', {
                     lang: languageCode,
                     dir: textDirection || this.languageDirectionLookup(languageCode),

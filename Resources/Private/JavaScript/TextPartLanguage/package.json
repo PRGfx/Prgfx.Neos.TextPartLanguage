@@ -1,22 +1,22 @@
 {
-  "description": "",
-  "license": "GNU GPLv3",
-  "private": true,
-  "scripts": {
-    "build": "neos-react-scripts build",
-    "watch": "neos-react-scripts watch"
-  },
-  "devDependencies": {
-    "@neos-project/neos-ui-extensibility": "^8.2.0",
-    "@neos-project/build-essentials": "^8.2.0"
-  },
-  "neos": {
-    "buildTargetDirectory": "../../../Public/JavaScript/TextPartLanguage"
-  },
-  "dependencies": {
-    "@ckeditor/ckeditor5-language": "27.1.0",
-    "@ckeditor/ckeditor5-utils": "^27.1.0",
-    "null-loader": "^4.0.1",
-    "raw-loader": "^4.0.2"
-  }
+    "description": "",
+    "license": "GNU GPLv3",
+    "private": true,
+    "scripts": {
+        "build": "node build.js",
+        "watch": "node build.js --watch"
+    },
+    "devDependencies": {
+        "@neos-project/neos-ui-extensibility": "~8.3.0",
+        "esbuild": "^0.25.5"
+    },
+    "neos": {
+        "buildTargetDirectory": "../../../Public/JavaScript/TextPartLanguage"
+    },
+    "dependencies": {
+        "@ckeditor/ckeditor5-language": "27.1.0",
+        "@ckeditor/ckeditor5-utils": "^27.1.0",
+        "null-loader": "^4.0.1",
+        "raw-loader": "^4.0.2"
+    }
 }

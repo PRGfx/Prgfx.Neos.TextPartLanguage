@@ -4,7 +4,7 @@
     "keywords": [ "neos", "neoscms", "ckeditor5", "ckeditor5-language" ],
     "type": "neos-package",
     "require": {
-        "neos/neos-ui": "^8.2"
+        "neos/neos-ui": "^8.2 || ^9"
     },
     "license": "GPL-3.0-or-later",
     "extra": {

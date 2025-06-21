@@ -1,7 +1,6 @@
 import manifest from '@neos-project/neos-ui-extensibility';
 import TextPartLanguage from './editing';
 import LanguageSelect from './LanguageSelect';
-import { $get } from 'plow-js';
 
 manifest('Prgfx.Neos.TextPartLanguage', {}, (globalRegistry, { frontendConfiguration }) => {
 
@@ -24,7 +23,7 @@ manifest('Prgfx.Neos.TextPartLanguage', {}, (globalRegistry, { frontendConfigura
     richtextToolbar.set('textPartLanguage', {
         component: LanguageSelect,
         callbackPropName: 'onSelect',
-        isVisible: $get('textLanguages'),
+        isVisible: editorOptions => !!editorOptions?.textLanguages,
         defaultLanguages,
     });
 });
